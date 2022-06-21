@@ -1,19 +1,12 @@
 body{
-	background-image: url("bg.jpeg");
+	background-image: url("bg.jpg");
   	background-repeat: no-repeat;
 	  background-size: cover;
 }
 
-.flight{
-	position: absolute;
-	width: 224px;
-	height: 175px;
-	left: 675px;
-	top: 40px;
-}
 
 .Text{
-	position: absolute;
+	text-align: center;
 	width: 599px;
 	height: 72px;
 	left: 875px;
@@ -104,6 +97,10 @@ body{
   	font-size: 16px;
  	width: 100%;
   	cursor: pointer;
+}
+
+.button:hover{
+	background-color: blue;;
 }
 
 .Text1{

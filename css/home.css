@@ -1,5 +1,5 @@
 body{
-    background-image: url("bg.jpeg");
+    background-image: url("bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -110,6 +110,10 @@ input[type=text],input[type=Password], select {
     cursor: pointer;
 }
 
+.button:hover{
+	background-color: blue;;
+}
+
 .SignUpPosition{
     position: absolute;
     width: 439px;
@@ -119,3 +123,4 @@ input[type=text],input[type=Password], select {
     font-weight: 700;
     font-size: 20px;
     text-align: right;
+}

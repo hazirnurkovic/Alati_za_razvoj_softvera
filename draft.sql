@@ -1,63 +1,96 @@
-DROP DATABASE IF EXISTS airline;
-CREATE DATABASE airline;
-USE airline;
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 21, 2022 at 09:22 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.27
 
-DROP TABLE IF EXISTS login;
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS airlines;
-DROP TABLE IF EXISTS airports;
-DROP TABLE IF EXISTS flights;
-DROP TABLE IF EXISTS costs;
-DROP TABLE IF EXISTS bookings;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-CREATE TABLE login(email varchar(50) primary key, password varchar(30));
-CREATE TABLE user(email varchar(50) primary key, name varchar(30), age int, gender char(1));
-CREATE TABLE airlines(airline_id varchar(10) primary key, airline_name varchar(25), logo varchar(100));
-CREATE TABLE airports(airport_code varchar(25) primary key,airport_name varchar(50), country varchar(25));
-CREATE TABLE flights(flight_no varchar(25) primary key, from_airport_code varchar(25), to_airport_code varchar(25), airline_id varchar(25), departure_time datetime, arrival_time datetime, seats_left_economy int(5), seats_left_business int(5));
-CREATE TABLE costs(airline_id varchar(25), economy int(11), business int(11));
-CREATE TABLE bookings(booking_id int(25) auto_increment, customer_email varchar(50),no_of_seats int(11), flight_no varchar(25), booking_date date , class_type varchar(25), primary key(booking_id));
-CREATE TABLE passenger(booking_id int(25), customer_name varchar(25), gender char(1),age int(11));
 
-ALTER TABLE user ADD CONSTRAINT FOREIGN KEY(email) REFERENCES login(email) on delete cascade;
-ALTER TABLE flights ADD CONSTRAINT FOREIGN KEY(from_airport_code) REFERENCES airports(airport_code) on delete cascade;
-ALTER TABLE flights ADD CONSTRAINT FOREIGN KEY(to_airport_code) REFERENCES airports(airport_code) on delete cascade;
-ALTER TABLE flights ADD CONSTRAINT FOREIGN KEY(airline_id) REFERENCES airlines(airline_id) on delete cascade;
-ALTER TABLE costs ADD CONSTRAINT FOREIGN KEY(airline_id) REFERENCES airlines(airline_id) on delete cascade;
-ALTER TABLE bookings ADD CONSTRAINT FOREIGN KEY(customer_email) REFERENCES login(email) on delete cascade;
-ALTER TABLE bookings ADD CONSTRAINT FOREIGN KEY(flight_no) REFERENCES flights(flight_no) on delete cascade;
-ALTER TABLE passenger ADD CONSTRAINT FOREIGN KEY(booking_id) REFERENCES bookings(booking_id) on delete cascade;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
--- INSERT INTO login values("atulkuchil@gmail.com", "aa");
--- INSERT INTO user values("atulkuchil@gmail.com","Atul",20,"M");
-INSERT INTO airports values("BLR","Bengaluru International Airport","India");
-INSERT INTO airports values("MAA","Chennai International Airport","India");
-INSERT INTO airports values("BOM","Chhatrapati Shivaji International Airport","India");
-INSERT INTO airlines values("AIR001","Jet Airways","https://pbs.twimg.com/profile_images/876775499799736321/1nFK_O5O_400x400.jpg");
-INSERT INTO airlines values("AIR002","SpiceJet","https://i.pinimg.com/originals/9f/41/91/9f4191ace7a83b42d468322d5668fefb.png");
-INSERT INTO flights values("JA1234","BLR","MAA","AIR001","2019-10-21 06:00:00","2019-10-21 08:00:00",50,20);
-INSERT INTO flights values("SJ3021","BLR","MAA","AIR002","2019-10-21 06:00:00","2019-10-21 08:00:00",50,20);
-INSERT INTO flights values("JA1111","BLR","MAA","AIR001","2019-10-22 06:00:00","2019-10-22 08:00:00",50,20);
-INSERT INTO flights values("SJ1234","BLR","BOM","AIR002","2019-10-23 10:00:00","2019-10-23 16:00:00",100,250);
-INSERT INTO costs values("AIR001", 4500, 9000);
-INSERT INTO costs values("AIR002", 3000, 6000);
--- INSERT INTO bookings values(0,"atulkuchil@gmail.com",1,"JA1234","2019-10-14 07:00:00","business");
--- INSERT INTO bookings values("0","atulkuchil@gmail.com",1,"SJ3021","2019-10-14 07:00:00");
--- INSERT INTO bookings values("0","atulkuchil@gmail.com",1,"JA1111","2019-10-14 07:00:00");
--- INSERT INTO bookings values("0","atulkuchil@gmail.com",1,"SJ1234","2019-10-14 07:00:00");
--- INSERT INTO passenger values(0,"Atul K", "M", 20);
-
-DELIMITER //
-CREATE PROCEDURE checkbookings(in name varchar(40))
-BEGIN
-select count(*) as len from passenger where customer_name=name;
-END // 
-DELIMITER ;
+--
+-- Database: `airline`
+--
 
 DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `checkbookings` (IN `name` VARCHAR(40))  BEGIN
+select count(*) as len from passenger where customer_name=name;
+END$$
 
-CREATE TRIGGER bookdup after insert on bookings for each row 
-BEGIN
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `airlines`
+--
+
+CREATE TABLE `airlines` (
+  `airline_id` varchar(10) NOT NULL,
+  `airline_name` varchar(25) DEFAULT NULL,
+  `logo` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `airlines`
+--
+
+INSERT INTO `airlines` (`airline_id`, `airline_name`, `logo`) VALUES
+('AIR001', 'Air Montenegro', 'https://twitter.com/lukijanooo/status/1398222725328613380'),
+('AIR002', 'Air Serbia', 'https://img-b1.rs/en/klijenti/air-serbia/air-serbia-vector-logo-2/');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `airports`
+--
+
+CREATE TABLE `airports` (
+  `airport_code` varchar(25) NOT NULL,
+  `airport_name` varchar(50) DEFAULT NULL,
+  `country` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `airports`
+--
+
+INSERT INTO `airports` (`airport_code`, `airport_name`, `country`) VALUES
+('BEG', 'Nikola Tesla Airport', 'Serbia'),
+('TGD', 'Podgorica Airport', 'Montenegro');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookings`
+--
+
+CREATE TABLE `bookings` (
+  `booking_id` int(25) NOT NULL,
+  `customer_email` varchar(50) DEFAULT NULL,
+  `no_of_seats` int(11) DEFAULT NULL,
+  `flight_no` varchar(25) DEFAULT NULL,
+  `booking_date` date DEFAULT NULL,
+  `class_type` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Triggers `bookings`
+--
+DELIMITER $$
+CREATE TRIGGER `bookdup` AFTER INSERT ON `bookings` FOR EACH ROW BEGIN
 DECLARE type_of_seat varchar(25);
 DECLARE nos int(11);
 DECLARE bk_id int(11);
@@ -71,12 +104,212 @@ ELSE
 UPDATE flights,bookings set seats_left_economy = seats_left_economy - nos where bookings.flight_no = flights.flight_no and bookings.booking_id = bk_id;
 END IF;
 
-END $$
-
+END
+$$
 DELIMITER ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `costs`
+--
+
+CREATE TABLE `costs` (
+  `airline_id` varchar(25) DEFAULT NULL,
+  `economy` int(11) DEFAULT NULL,
+  `business` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `costs`
+--
+
+INSERT INTO `costs` (`airline_id`, `economy`, `business`) VALUES
+('AIR001', 90, 160),
+('AIR002', 110, 200);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flights`
+--
+
+CREATE TABLE `flights` (
+  `flight_no` varchar(25) NOT NULL,
+  `from_airport_code` varchar(25) DEFAULT NULL,
+  `to_airport_code` varchar(25) DEFAULT NULL,
+  `airline_id` varchar(25) DEFAULT NULL,
+  `departure_time` datetime DEFAULT NULL,
+  `arrival_time` datetime DEFAULT NULL,
+  `seats_left_economy` int(5) DEFAULT NULL,
+  `seats_left_business` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `flights`
+--
+
+INSERT INTO `flights` (`flight_no`, `from_airport_code`, `to_airport_code`, `airline_id`, `departure_time`, `arrival_time`, `seats_left_economy`, `seats_left_business`) VALUES
+('MNE102', 'TGD', 'BEG', 'AIR001', '2022-06-22 06:00:00', '2022-06-22 06:45:00', 50, 20),
+('MNE119', 'TGD', 'BEG', 'AIR001', '2022-07-03 21:00:00', '2022-07-03 21:46:00', 100, 250),
+('SRB103', 'BEG', 'TGD', 'AIR002', '2022-06-25 09:00:00', '2022-06-25 09:45:00', 50, 18);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `email` varchar(50) NOT NULL,
+  `password` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`email`, `password`) VALUES
+('filip123@gmail.com', 'filip123');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passenger`
+--
+
+CREATE TABLE `passenger` (
+  `booking_id` int(25) DEFAULT NULL,
+  `customer_name` varchar(25) DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `email` varchar(50) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`email`, `name`, `age`, `gender`) VALUES
+('filip123@gmail.com', 'Filip Marijanovic', 23, 'M');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `airlines`
+--
+ALTER TABLE `airlines`
+  ADD PRIMARY KEY (`airline_id`);
+
+--
+-- Indexes for table `airports`
+--
+ALTER TABLE `airports`
+  ADD PRIMARY KEY (`airport_code`);
+
+--
+-- Indexes for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`booking_id`),
+  ADD KEY `customer_email` (`customer_email`),
+  ADD KEY `flight_no` (`flight_no`);
+
+--
+-- Indexes for table `costs`
+--
+ALTER TABLE `costs`
+  ADD KEY `airline_id` (`airline_id`);
+
+--
+-- Indexes for table `flights`
+--
+ALTER TABLE `flights`
+  ADD PRIMARY KEY (`flight_no`),
+  ADD KEY `from_airport_code` (`from_airport_code`),
+  ADD KEY `to_airport_code` (`to_airport_code`),
+  ADD KEY `airline_id` (`airline_id`);
+
+--
+-- Indexes for table `login`
+--
+ALTER TABLE `login`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `passenger`
+--
+ALTER TABLE `passenger`
+  ADD KEY `booking_id` (`booking_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bookings`
+--
+ALTER TABLE `bookings`
+  MODIFY `booking_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`customer_email`) REFERENCES `login` (`email`) ON DELETE CASCADE,
+  ADD CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`flight_no`) REFERENCES `flights` (`flight_no`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `costs`
+--
+ALTER TABLE `costs`
+  ADD CONSTRAINT `costs_ibfk_1` FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`airline_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `flights`
+--
+ALTER TABLE `flights`
+  ADD CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`from_airport_code`) REFERENCES `airports` (`airport_code`) ON DELETE CASCADE,
+  ADD CONSTRAINT `flights_ibfk_2` FOREIGN KEY (`to_airport_code`) REFERENCES `airports` (`airport_code`) ON DELETE CASCADE,
+  ADD CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`airline_id`) REFERENCES `airlines` (`airline_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `passenger`
+--
+ALTER TABLE `passenger`
+  ADD CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`email`) REFERENCES `login` (`email`) ON DELETE CASCADE;
 COMMIT;
 
-
--- Comment All after this
--- select l.logo,6*c.business as price,a1.airport_code as from_code,a1.airport_name as from_name,a2.airport_code as to_code,a2.airport_name as to_name,l.airline_name,f.flight_no,TIME(f.departure_time) as departure_time,TIME(f.arrival_time) as arrival_time from airports as a1, airports as a2, airlines as l, flights as f,costs as c where l.airline_id=f.airline_id and f.from_airport_code=a1.airport_code and f.to_airport_code=a2.airport_code and c.airline_id = l.airline_id and from_airport_code='BLR' and to_airport_code = 'MAA' and DATE(departure_time)='2019-10-21' and f.seats_left_business>=5;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

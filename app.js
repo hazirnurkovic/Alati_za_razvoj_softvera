@@ -6,17 +6,10 @@ var session = require("express-session");
 
 var connection = mysql.createConnection({
   host: "localhost",
-  user: "name",
-  password: "MistakenFoe-6",
+  user: "root",
+  password: "",
   database: "airline"
 });
-
-// var connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "dbms",
-//   password: "dbms",
-//   database: "airline"
-// });
 
 connection.connect(function(err) {
   if (err) throw err;
@@ -79,7 +72,6 @@ app.get("/search",isLoggedIn, function(req, res) {
     class_type +
     ">=" +
     noofppl;
-  // console.log(sql);
   connection.query(sql, function(err, result) {
     if (err) {
       console.log(err);
@@ -92,7 +84,6 @@ app.get("/search",isLoggedIn, function(req, res) {
 
 app.get("/flights",isLoggedIn, function(req, res) {
   var flights = req.session.message;
-  // console.log(flights);
   res.render("results", { flights: flights });
 });
 
@@ -171,7 +162,6 @@ app.get("/confirmbooking",isLoggedIn, function(req, res) {
         });
       });
       res.send("Booking Confirmed");
-      // res.send("Booking Confirmed with " + conflicts + " conflicts");
     }
   });
 });

@@ -1,19 +1,12 @@
 body{
-	background-image: url("bg.jpeg");
+	background-image: url("bg.jpg");
   	background-repeat: no-repeat;
 	  background-size: cover;
 }
 
-.flight{
-	position: absolute;
-	width: 224px;
-	height: 175px;
-	left: 675px;
-	top: 40px;
-}
 
 .Text{
-	position: absolute;
+	text-align: center;
 	width: 599px;
 	height: 72px;
 	left: 875px;
@@ -83,11 +76,17 @@ body{
 	right: 30px;
 	top: 30px;
 	text-decoration: none;
-	background: orange;
-	color: black;
+	background: solidblue;
+	border: 1px solid white;
+	border-radius: 25px;
+	color: white;
 	font-weight: bold;
 	padding: 1em 2em;
 	font-size: 1.1rem;
+}
+
+#logout-button:hover{
+	background: purple;
 }
 
 input[type=text], select {
@@ -137,6 +136,10 @@ input, select {
   	font-size: 16px;
  	width: 100%;
   	cursor: pointer;
+}
+
+.button:hover{
+	background-color: blue;;
 }
 
 .Text1{
