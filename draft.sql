@@ -48,8 +48,8 @@ CREATE TABLE `airlines` (
 --
 
 INSERT INTO `airlines` (`airline_id`, `airline_name`, `logo`) VALUES
-('AIR001', 'Air Montenegro', 'https://twitter.com/lukijanooo/status/1398222725328613380'),
-('AIR002', 'Air Serbia', 'https://img-b1.rs/en/klijenti/air-serbia/air-serbia-vector-logo-2/');
+('AIR001', 'Air Montenegro', 'https://airmontenegro.com/img/airmontenegro-logo.svg'),
+('AIR002', 'Air Serbia', 'https://www.airserbia.com/img/logo/airserbia_logo_navy.svg');
 
 -- --------------------------------------------------------
 
